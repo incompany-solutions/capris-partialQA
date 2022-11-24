@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : ???
  * @group             : 
- * @last modified on  : 21-10-2022
+ * @last modified on  : 21-11-2022
  * @last modified by  : esteban@incompany.cr
 **/
 public class Batchable_upsertAccount implements Database.Batchable<DeserializeJSONAccount.AccountMainList>, Database.Stateful{
@@ -44,7 +44,7 @@ public class Batchable_upsertAccount implements Database.Batchable<DeserializeJS
             acc.zonaCanton__c = pickListValuesList.get(wrap.canton);
             acc.forma_pago__c = Double.valueOf(wrap.porcExoIva);
             acc.merc_usu_modifica__c = wrap.usuModifica;
-            acc.merc_fyh_modifica__c = wrap.fyhModifica != 'null' ? Datetime.newInstance(LONG.valueOf(wrap.fyhModifica)) : null;
+            acc.merc_fyh_modifica__c = wrap.fyhModifica != '' ? Datetime.valueOf(wrap.fyhModifica) : null;
             acc.mcl_hor_entr__c = wrap.horaEntrega;
             acc.mcl_obs_entr__c = wrap.obsEntrega;
             acc.sucursal_vendedor__c = wrap.reqOc;
@@ -53,8 +53,8 @@ public class Batchable_upsertAccount implements Database.Batchable<DeserializeJS
             acc.limit_credit__c = Double.valueOf(wrap.limiteCredito);
             acc.dias_tramit_cob__c = wrap.diaTramite;
             acc.cod_cobrador__c = wrap.cobradorCxc;
-            if (wrap.fyhIngreso != 'null') {
-                acc.fecha_ing__c = Datetime.newInstance(LONG.valueOf(wrap.fyhIngreso));
+            if (wrap.fyhIngreso != '') {
+                acc.fecha_ing__c = Datetime.valueOf(wrap.fyhIngreso);
             }
             acc.plazo_credito__c = wrap.plazoCxc;
             acc.mcl_nombre1__c = wrap.nombre1;
@@ -64,9 +64,7 @@ public class Batchable_upsertAccount implements Database.Batchable<DeserializeJS
             acc.mcl_usu_ing__c = wrap.usuIngreso;
             acc.mcl_env_email__c = Boolean.valueOf(wrap.envEmail);
             acc.mcl_env_sms__c = Boolean.valueOf(wrap.envSms);
-            if (wrap.fyhNacimiento != 'null') {
-                acc.mcl_fec_nac__c = Date.valueOf(Datetime.newInstance(LONG.valueOf(wrap.fyhNacimiento)));
-            }
+            acc.mcl_fec_nac__c = wrap.fyhNacimiento!=''?Date.valueOf(wrap.fyhNacimiento):null;
             acc.mcl_id_puesto__c = wrap.idPuesto;
             acc.mcl_plazo_tec__c = wrap.plazoTec;
             acc.mcl_cob_tec__c = wrap.cobradorTec;
