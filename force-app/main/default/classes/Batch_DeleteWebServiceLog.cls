@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 24-11-2022
+ * @last modified on  : 28-11-2022
  * @last modified by  : esteban@incompany.cr
 **/
 public with sharing class Batch_DeleteWebServiceLog implements Database.Batchable<sObject>, Database.Stateful  {
@@ -12,7 +12,7 @@ public with sharing class Batch_DeleteWebServiceLog implements Database.Batchabl
     Integer i = 0;
     public Database.QueryLocator start(Database.BatchableContext bc) {
         return DataBase.getQueryLocator(
-            '[SELECT Id FROM WebServiceLog__c LIMIT 200000 ORDER BY CreatedDate ASC]'
+            'SELECT Id,CreatedDate FROM WebServiceLog__c ORDER BY CreatedDate ASC LIMIT 200000'
         );
     }
     public void execute(Database.BatchableContext bc, List<WebServiceLog__c> records){
@@ -30,7 +30,6 @@ public with sharing class Batch_DeleteWebServiceLog implements Database.Batchabl
             Batch_ObjectStatusDMLHandler statusObject = new Batch_ObjectStatusDMLHandler();
             if (databaseResult.isSuccess()) {
                 // Operation was successful, so get the ID of the record that was processed
-                System.debug('Successfully deleted account with ID: ' + databaseResult.getId());
                 statusObject.objectSelected = (WebServiceLog__c) mapWebServiceLogToDelete.get(databaseResult.getId());
                 statusObject.status = 'SUCCESS';
                 successLogsDML.add(statusObject);
@@ -53,7 +52,6 @@ public with sharing class Batch_DeleteWebServiceLog implements Database.Batchabl
     public void finish(Database.BatchableContext bc){
 
         Date today = Date.today();
-        System.debug('Send Message');
         Blob successCVS = generateCSV(successLogsDML);
         Blob errorCVS = generateCSV(errorLogsDML);
         String strToday = today.Day()+'_'+today.Month()+'_'+today.Year();

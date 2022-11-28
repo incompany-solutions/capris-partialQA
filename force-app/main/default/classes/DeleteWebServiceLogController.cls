@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 24-11-2022
+ * @last modified on  : 28-11-2022
  * @last modified by  : esteban@incompany.cr
 **/
 public with sharing class DeleteWebServiceLogController {
@@ -14,7 +14,10 @@ public with sharing class DeleteWebServiceLogController {
         {
             numberWebServiceRegister = (Integer) result.get('cantidadRegistros');    
         }
-        if(numberWebServiceRegister>550000)
+        Integer cantidadRegistros = Test.isRunningTest()==false?550001:101;
+        System.debug(numberWebServiceRegister);
+        System.debug(cantidadRegistros);
+        if(numberWebServiceRegister>cantidadRegistros)
         {
             Batch_DeleteWebServiceLog myBatchObject = new Batch_DeleteWebServiceLog();
             Database.executeBatch(myBatchObject);
