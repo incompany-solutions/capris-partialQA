@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 15-11-2022
+ * @last modified on  : 28-11-2022
  * @last modified by  : esteban@incompany.cr
 **/
 public with sharing class Batch_DeleteDetalleMovimiento implements Database.Batchable<sObject>, Database.Stateful{
@@ -12,11 +12,11 @@ public with sharing class Batch_DeleteDetalleMovimiento implements Database.Batc
     Integer i = 0;
     public Database.QueryLocator start(Database.BatchableContext bc) {
         Datetime now = Datetime.now();
-        Datetime oneLessYear = Datetime.newInstance(now.Year()-1, now.Month(), now.Day(), now.hour()+6, now.minute(), now.second());
-        String strOneLessYear = String.valueOf(oneLessYear).replace(' ','T');
+        Date oneLessYear = Date.newInstance(now.Year()-1, now.Month(), now.Day());
+        String strOneLessYear = String.valueOf(oneLessYear);
         System.debug('SELECT Id,CreatedDate FROM Detalle_de_Movimiento__c WHERE Fecha_del_Movimiento__c < '+strOneLessYear+' ORDER BY CreatedDate DESC');
         return DataBase.getQueryLocator(
-            'SELECT Id,CreatedDate FROM Detalle_de_Movimiento__c WHERE Fecha_del_Movimiento__c < '+strOneLessYear+'Z ORDER BY CreatedDate DESC'
+            'SELECT Id,CreatedDate FROM Detalle_de_Movimiento__c WHERE Fecha_del_Movimiento__c < '+strOneLessYear+' ORDER BY CreatedDate DESC'
         );
     }
     public void execute(Database.BatchableContext bc, List<Detalle_de_Movimiento__c> records){
