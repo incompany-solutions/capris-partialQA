@@ -94,4 +94,31 @@ public with sharing class TestData {
         return eventoToDelete1;
 
     }
+
+    private static Lead createLead(Boolean insertLead){
+        Lead lead1 = new Lead();
+        lead1.FirstName = 'Lead';
+        lead1.LastName = 'Test';
+        lead1.Company = 'Incompany';
+        if(insertLead)
+        {
+            insert lead1;
+        }
+
+        return lead1;
+    }
+
+    public static Task createTask(Boolean insertTask){
+        Lead lead1 = createLead(true);
+
+        Task deleteTask1 = new Task();
+        deleteTask1.WhoId = lead1.Id;
+        deleteTask1.Description = 'Test Task to Delete';
+        if(insertTask)
+        {
+            insert deleteTask1;
+        }
+
+        return deleteTask1;
+    }
 }
