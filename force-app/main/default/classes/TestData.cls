@@ -62,4 +62,20 @@ public with sharing class TestData {
 
         return detalleDelete1;
     }
+
+    public static EmailMessage createEmailMessage(Boolean insertEmailMessage)
+    {
+        EmailMessage emailToDelete1 = new EmailMessage();
+        emailToDelete1.TextBody='Message'; 
+        emailToDelete1.Subject='Message';
+        emailToDelete1.FromName='Esteban Segura Benavides';
+        emailToDelete1.FromAddress='esteban@incompany.cr';
+        emailToDelete1.ToAddress='admin@incompany.cr';
+        if(insertEmailMessage)
+        {
+            insert emailToDelete1;
+        }
+
+        return emailToDelete1;
+    }
 }
