@@ -78,4 +78,20 @@ public with sharing class TestData {
 
         return emailToDelete1;
     }
+
+    public static EventoEncabezado__c createEventoEncabezado(Boolean insertEventoEncabezado,Date fechaEvento)
+    {
+        Encabezado__c encabezado =  createEncabezado(true,fechaEvento);
+
+        EventoEncabezado__c eventoToDelete1 = new EventoEncabezado__c();
+        eventoToDelete1.Encabezado__c = encabezado.Id;
+        eventoToDelete1.Fecha_de_evento__c = fechaEvento;
+        if(insertEventoEncabezado)
+        {
+            insert eventoToDelete1;
+        }
+
+        return eventoToDelete1;
+
+    }
 }
