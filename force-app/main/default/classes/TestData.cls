@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 28-11-2022
+ * @last modified on  : 29-11-2022
  * @last modified by  : esteban@incompany.cr
 **/
 @isTest
@@ -120,5 +120,22 @@ public with sharing class TestData {
         }
 
         return deleteTask1;
+    }
+
+    public static List<WebServiceLog__c> createWebService(Boolean insertWebService){
+        List<WebServiceLog__c> lstWebService = new List<WebServiceLog__c>();
+        for(Integer i = 0;i<102;i++)
+        {
+            WebServiceLog__c webServiceToDelete = new WebServiceLog__c();
+            webServiceToDelete.Web_Services__c = 'Clientes';
+            
+            lstWebService.add(webServiceToDelete);
+        }
+        if(insertWebService)
+        {
+            insert lstWebService;
+        }
+
+        return lstWebService;
     }
 }
