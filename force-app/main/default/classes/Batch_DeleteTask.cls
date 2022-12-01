@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 16-11-2022
+ * @last modified on  : 01-12-2022
  * @last modified by  : esteban@incompany.cr
 **/
 public with sharing class Batch_DeleteTask implements Database.Batchable<sObject>, Database.Stateful{
@@ -63,7 +63,7 @@ public with sharing class Batch_DeleteTask implements Database.Batchable<sObject
         String strToday = today.Day()+'_'+today.Month()+'_'+today.Year();
         String csvSuccessName= 'TaskSucess_'+strToday+'.csv';  
         String csvErrorName= 'TaskFail_'+strToday+'.csv'; 
-        String emailSubject = 'Resultados Evento Encabezado  '+strToday;
+        String emailSubject = 'Resultados Tareas '+strToday;
         Batch_DeleteHelper.sendEmail(emailSubject,csvSuccessName,csvErrorName,successCVS,errorCVS);
         
     }
@@ -74,8 +74,8 @@ public with sharing class Batch_DeleteTask implements Database.Batchable<sObject
         String finalstr = header ;
         for(Batch_ObjectStatusDMLHandler objectRecieved: successTaskDML)
         {
-            Task actualEventoEncabezado = (Task) objectRecieved.objectSelected;
-            String recordString = actualEventoEncabezado.Id+','+actualEventoEncabezado.CreatedDate+','+objectRecieved.status+','+objectRecieved.errorMessage+'\n';
+            Task actuakTask = (Task) objectRecieved.objectSelected;
+            String recordString = actuakTask.Id+','+actuakTask.CreatedDate+','+objectRecieved.status+','+objectRecieved.errorMessage+'\n';
 
             finalstr = finalstr +recordString;
 
