@@ -2,21 +2,21 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 28-11-2022
+ * @last modified on  : 28-12-2022
  * @last modified by  : esteban@incompany.cr
 **/
 public with sharing class Batch_DeleteDetalleMovimiento implements Database.Batchable<sObject>, Database.Stateful{
     public List<Detalle_de_Movimiento__c> detalleMovimientoToDelete = new List<Detalle_de_Movimiento__c>();
     public List<Batch_ObjectStatusDMLHandler> successDetalleMovimientoDML = new List<Batch_ObjectStatusDMLHandler>();
     public List<Batch_ObjectStatusDMLHandler> errorDetalleMovimientoDML = new List<Batch_ObjectStatusDMLHandler>();
-    Integer i = 0;
+
     public Database.QueryLocator start(Database.BatchableContext bc) {
         Datetime now = Datetime.now();
         Date oneLessYear = Date.newInstance(now.Year()-1, now.Month(), now.Day());
         String strOneLessYear = String.valueOf(oneLessYear);
-        System.debug('SELECT Id,CreatedDate FROM Detalle_de_Movimiento__c WHERE Fecha_del_Movimiento__c < '+strOneLessYear+' ORDER BY CreatedDate DESC');
+        System.debug('SELECT Id,Fecha_del_Movimiento__c FROM Detalle_de_Movimiento__c WHERE Fecha_del_Movimiento__c < '+strOneLessYear+' ORDER BY Fecha_del_Movimiento__c DESC');
         return DataBase.getQueryLocator(
-            'SELECT Id,CreatedDate FROM Detalle_de_Movimiento__c WHERE Fecha_del_Movimiento__c < '+strOneLessYear+' ORDER BY CreatedDate DESC'
+            'SELECT Id,Fecha_del_Movimiento__c FROM Detalle_de_Movimiento__c WHERE Fecha_del_Movimiento__c < '+strOneLessYear+' ORDER BY Fecha_del_Movimiento__c DESC'
         );
     }
     public void execute(Database.BatchableContext bc, List<Detalle_de_Movimiento__c> records){
@@ -29,7 +29,8 @@ public with sharing class Batch_DeleteDetalleMovimiento implements Database.Batc
             mapDetalleMovimientoToDelete.put(emailToDelete.Id,emailToDelete);
         }
         
-        Database.DeleteResult[] deleteResults = Database.delete(detalleMovimientoToDelete,false);
+        Database.DeleteResult[] deleteResults = Database.delete(mapDetalleMovimientoToDelete.values(),false);
+        Integer i=0;
         for(Database.DeleteResult databaseResult : deleteResults) {
             Batch_ObjectStatusDMLHandler statusObject = new Batch_ObjectStatusDMLHandler();
             if (databaseResult.isSuccess()) {
@@ -70,12 +71,12 @@ public with sharing class Batch_DeleteDetalleMovimiento implements Database.Batc
     @TestVisible
     private static Blob generateCSV(List<Batch_ObjectStatusDMLHandler> successDetalleMovimientoDML)
     {
-        String header = 'ID, CREATEDDATE, STATUS, MESSAGE \n';
+        String header = 'ID, FECHAMOVIMIENTO, STATUS, MESSAGE \n';
         String finalstr = header ;
         for(Batch_ObjectStatusDMLHandler objectRecieved: successDetalleMovimientoDML)
         {
             Detalle_de_Movimiento__c actualDetalleMovimiento = (Detalle_de_Movimiento__c) objectRecieved.objectSelected;
-            String recordString = actualDetalleMovimiento.Id+','+actualDetalleMovimiento.CreatedDate+','+objectRecieved.status+','+objectRecieved.errorMessage+'\n';
+            String recordString = actualDetalleMovimiento.Id+','+actualDetalleMovimiento.Fecha_del_Movimiento__c+','+objectRecieved.status+','+objectRecieved.errorMessage+'\n';
 
             finalstr = finalstr +recordString;
 

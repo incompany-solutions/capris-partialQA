@@ -6,10 +6,10 @@
  * @last modified by  : esteban@incompany.cr
 **/
 public with sharing class Batch_DeleteTask implements Database.Batchable<sObject>, Database.Stateful{
-    public List<Task> lstTaskToDelete = new List<Task>();
+    public List<Task> lstTotalTaskToDelete = new List<Task>();
     public List<Batch_ObjectStatusDMLHandler> successTaskDML = new List<Batch_ObjectStatusDMLHandler>();
     public List<Batch_ObjectStatusDMLHandler> errorTaskDML = new List<Batch_ObjectStatusDMLHandler>();
-    Integer i = 0;
+
     public Database.QueryLocator start(Database.BatchableContext bc) {
         Datetime now = Datetime.now();
         Datetime oneLessYear = Datetime.newInstance(now.Year()-1, now.Month(), now.Day(), now.hour()+6, now.minute(), now.second());
@@ -25,11 +25,12 @@ public with sharing class Batch_DeleteTask implements Database.Batchable<sObject
         // process each batch of records
         for(Task taskToDelete : records)
         {
-            lstTaskToDelete.add(taskToDelete);
+            lstTotalTaskToDelete.add(taskToDelete);
             mapTaskToDelete.put(taskToDelete.Id,taskToDelete);
         }
         
-        Database.DeleteResult[] deleteResults = Database.delete(lstTaskToDelete,false);
+        Database.DeleteResult[] deleteResults = Database.delete(mapTaskToDelete.values(),false);
+        Integer i=0;
         for(Database.DeleteResult databaseResult : deleteResults) {
             Batch_ObjectStatusDMLHandler statusObject = new Batch_ObjectStatusDMLHandler();
             if (databaseResult.isSuccess()) {
@@ -43,9 +44,9 @@ public with sharing class Batch_DeleteTask implements Database.Batchable<sObject
                 // Operation failed, so get all errors  
                 String strError = '';
                 for(Database.Error err : databaseResult.getErrors()) {
-                    strError += 'The following error has occurred: '+err.getStatusCode() + ': ' + err.getMessage()+':'+ err.getFields()+'\n';
+                    strError += 'The following error has occurred: '+err.getStatusCode() + ': ' + err.getMessage()+':'+ err.getFields();
                 }
-                statusObject.objectSelected = (Task) lstTaskToDelete[i];
+                statusObject.objectSelected = (Task) mapTaskToDelete.values()[i];
                 statusObject.status = 'FAIL';
                 statusObject.errorMessage = strError;
 
@@ -71,7 +72,7 @@ public with sharing class Batch_DeleteTask implements Database.Batchable<sObject
     private static Blob generateCSV(List<Batch_ObjectStatusDMLHandler> successTaskDML)
     {
         String header = 'ID, CREATEDDATE, STATUS, MESSAGE \n';
-        String finalstr = header ;
+        String finalstr = header;
         for(Batch_ObjectStatusDMLHandler objectRecieved: successTaskDML)
         {
             Task actuakTask = (Task) objectRecieved.objectSelected;
