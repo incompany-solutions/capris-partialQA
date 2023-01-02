@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 16-11-2022
+ * @last modified on  : 19-12-2022
  * @last modified by  : esteban@incompany.cr
 **/
 public with sharing class Batch_DeleteEventoEncabezado implements Database.Batchable<sObject>, Database.Stateful{
@@ -29,7 +29,7 @@ public with sharing class Batch_DeleteEventoEncabezado implements Database.Batch
             mapEventoEncabezadoToDelete.put(eventoToDelete.Id,eventoToDelete);
         }
         
-        Database.DeleteResult[] deleteResults = Database.delete(EventoEncabezadoToDelete,false);
+        Database.DeleteResult[] deleteResults = Database.delete(mapEventoEncabezadoToDelete.values(),false);
         for(Database.DeleteResult databaseResult : deleteResults) {
             Batch_ObjectStatusDMLHandler statusObject = new Batch_ObjectStatusDMLHandler();
             if (databaseResult.isSuccess()) {

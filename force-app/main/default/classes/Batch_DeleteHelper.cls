@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 15-11-2022
+ * @last modified on  : 01-12-2022
  * @last modified by  : esteban@incompany.cr
 **/
 public with sharing class Batch_DeleteHelper {
@@ -18,17 +18,20 @@ public with sharing class Batch_DeleteHelper {
         
         Messaging.SingleEmailMessage email =new Messaging.SingleEmailMessage();
         List<EmailsNotificacion__mdt> lstEmailsConfigurados = [SELECT Email__c FROM EmailsNotificacion__mdt WHERE isActivo__c = true];
-        List<String> lstEmailsToAddress = new List<String>();
-        for(EmailsNotificacion__mdt registro : lstEmailsConfigurados)
+        if(lstEmailsConfigurados.size()>0)
         {
-            lstEmailsToAddress.add(registro.Email__c);
+            List<String> lstEmailsToAddress = new List<String>();
+            for(EmailsNotificacion__mdt registro : lstEmailsConfigurados)
+            {
+                lstEmailsToAddress.add(registro.Email__c);
+            }
+            String[] toAddresses = lstEmailsToAddress;
+            String subject =emailSubject;
+            email.setSubject(subject);
+            email.setToAddresses( toAddresses );
+            email.setPlainTextBody('A continuacion se adjuntan los '+emailSubject);
+            email.setFileAttachments(new Messaging.EmailFileAttachment[]{SuccessfullyDeleteAttach,ErrorDeleteAttach});
+            Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});
         }
-        String[] toAddresses = lstEmailsToAddress;
-        String subject =emailSubject;
-        email.setSubject(subject);
-        email.setToAddresses( toAddresses );
-        email.setPlainTextBody('A continuacion se adjuntan los '+emailSubject);
-        email.setFileAttachments(new Messaging.EmailFileAttachment[]{SuccessfullyDeleteAttach,ErrorDeleteAttach});
-        Messaging.SendEmailResult [] r = Messaging.sendEmail(new Messaging.SingleEmailMessage[] {email});
     }
 }
