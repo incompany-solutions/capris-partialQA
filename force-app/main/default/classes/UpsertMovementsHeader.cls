@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : ???
  * @group             : 
- * @last modified on  : 02-11-2022
+ * @last modified on  : 13-04-2023
  * @last modified by  : esteban@incompany.cr
 **/
 public class UpsertMovementsHeader {
@@ -291,7 +291,7 @@ public class UpsertMovementsHeader {
         //upsert MovementHeaderLst Id_Capris__c;
         System.debug('MovementHeaderLst ::::::' + MovementHeaderLst[0].Id);
 
-        List<WebServiceLog__c> lerrors = new List<WebServiceLog__c> ();
+        // List<WebServiceLog__c> lerrors = new List<WebServiceLog__c> ();
         
         JSONGenerator gen = JSON.createGenerator(false);
         gen.writeStartObject();
@@ -322,11 +322,11 @@ public class UpsertMovementsHeader {
                     gen.writeStringField('status', 'Error al procesar el registro ' + e.getMessage());
                     gen.writeEndObject();
                     
-                     WebServiceLog__c log = new WebServiceLog__c();
-                    log.Web_Services__c='Movimientos';
-                    log.ErrorDetail__c = 'codOrg=' + CounterMap.get(Counter2).split('-') [0] + ' --tipoMov=' + CounterMap.get(Counter2).split('-') [1] + ' --codPuntoFact=' + CounterMap.get(Counter2).split('-') [2] + ' --numDocum=' + CounterMap.get(Counter2).split('-') [3] + ' --- ' + e.getMessage() + '\nStatus Code : '+e.getStatusCode();
-                    log.hasErrors__c = true;
-                    lerrors.add(log);
+                    //  WebServiceLog__c log = new WebServiceLog__c();
+                    // log.Web_Services__c='Movimientos';
+                    // log.ErrorDetail__c = 'codOrg=' + CounterMap.get(Counter2).split('-') [0] + ' --tipoMov=' + CounterMap.get(Counter2).split('-') [1] + ' --codPuntoFact=' + CounterMap.get(Counter2).split('-') [2] + ' --numDocum=' + CounterMap.get(Counter2).split('-') [3] + ' --- ' + e.getMessage() + '\nStatus Code : '+e.getStatusCode();
+                    // log.hasErrors__c = true;
+                    // lerrors.add(log);
                 }
             }
         }
@@ -336,9 +336,9 @@ public class UpsertMovementsHeader {
         gen.writeEndArray();
         gen.writeEndObject();
 
-         if (lerrors.size() > 0){
-            insert lerrors;
-        }
+        //  if (lerrors.size() > 0){
+        //     insert lerrors;
+        // }
         
         return gen.getAsString();
     }
