@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 12-10-2022
+ * @last modified on  : 13-04-2023
  * @last modified by  : esteban@incompany.cr
 **/
 public class UpsertMovementsDetail {
@@ -56,7 +56,7 @@ public class UpsertMovementsDetail {
         Schema.SObjectField f = Detalle_de_Movimiento__c.Fields.Id_Capris__c;
         Database.UpsertResult[] saveResultList = Database.upsert(mapMovementDetail.values(), f, false);
 
-        List<WebServiceLog__c> lerrors = new List<WebServiceLog__c> ();
+        // List<WebServiceLog__c> lerrors = new List<WebServiceLog__c> ();
 
         JSONGenerator gen = JSON.createGenerator(false);
         gen.writeStartObject();
@@ -77,21 +77,21 @@ public class UpsertMovementsDetail {
                     gen.writeStringField('Status', CounterMap.get(Counter2));
                     gen.writeEndObject();
 
-                    WebServiceLog__c log = new WebServiceLog__c();
-                    log.Web_Services__c='Detalle Movimiento';
-                    log.WebServiceMethod__c = 'WebServiceMovementDetail';
-                    log.ErrorDetail__c = 'Error message : ' +  e.getMessage() + '\nStatus Code : '+e.getStatusCode()+'\n Fields : '+e.getFields();
-                    log.hasErrors__c = true;
-                    lerrors.add(log);
+                    // WebServiceLog__c log = new WebServiceLog__c();
+                    // log.Web_Services__c='Detalle Movimiento';
+                    // log.WebServiceMethod__c = 'WebServiceMovementDetail';
+                    // log.ErrorDetail__c = 'Error message : ' +  e.getMessage() + '\nStatus Code : '+e.getStatusCode()+'\n Fields : '+e.getFields();
+                    // log.hasErrors__c = true;
+                    // lerrors.add(log);
                 }
             }
         }
         gen.writeEndArray();
         gen.writeEndObject();
 
-        if (lerrors.size() > 0){
-            insert lerrors;
-        }
+        // if (lerrors.size() > 0){
+        //     insert lerrors;
+        // }
 
         return gen.getAsString();
 		//return '{"ResponseMainList":[{"codigo":"Se procesó correctamente el registro","Status":"CAP"}]}';
