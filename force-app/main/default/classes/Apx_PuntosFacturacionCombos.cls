@@ -2,9 +2,9 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 29-05-2023
+ * @last modified on  : 07-06-2023
  * @last modified by  : esteban@incompany.cr
-**/
+**/ 
 public class Apx_PuntosFacturacionCombos {
     public static String generateCredenciales()
     {
