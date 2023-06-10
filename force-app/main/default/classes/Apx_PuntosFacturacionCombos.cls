@@ -2,9 +2,9 @@
  * @description       : 
  * @author            : esteban@incompany.cr
  * @group             : 
- * @last modified on  : 07-06-2023
+ * @last modified on  : 29-05-2023
  * @last modified by  : esteban@incompany.cr
-**/ 
+**/
 public class Apx_PuntosFacturacionCombos {
     public static String generateCredenciales()
     {
@@ -30,15 +30,13 @@ public class Apx_PuntosFacturacionCombos {
         }
     }
 
-    public static HttpResponse CallWSMuelles(String compania) 
-    {
+    public static HttpResponse CallWSMuelles(String compania) {
         String CREDENCIALES = generateCredenciales();
         Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_muellesptofact');
         String endpoint = catalogo.URL__c;
 
         HttpResponse res = new HttpResponse();
-        try 
-        {
+        try {
             HttpRequest req = new HttpRequest();
             req.setEndpoint(endpoint);
             req.setBody(CREDENCIALES);
