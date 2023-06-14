@@ -563,6 +563,7 @@ public class Apx_JsonInsertEncabezados
 			//Request del servicio
 			HttpRequest req = new HttpRequest();
 			req.setEndpoint(Url);
+			req.setBody(CredentialHelper.CREDENTIALS);
 			req.setMethod('GET');
 			//req.setBody(body)
 			req.setTimeout(120000);
@@ -593,6 +594,7 @@ public class Apx_JsonInsertEncabezados
 			//Request del servicio
 			HttpRequest req = new HttpRequest();
 			req.setEndpoint(Url);
+			req.setBody(CredentialHelper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
 			Http h = new Http();

@@ -6,14 +6,6 @@
  * @last modified by  : esteban@incompany.cr
 **/
 public class Apx_PuntosFacturacionCombos {
-    public static String generateCredenciales()
-    {
-        Credenciales_Endpoint__mdt mdt_credenciales = Credenciales_Endpoint__mdt.getInstance('credenciales');
-        String pkey = mdt_credenciales.Llave__c;
-        String porg = mdt_credenciales.Organization__c;
-        String CREDENCIALES = '{"pkey":"'+pkey+'","porg":"'+porg+'"}';
-        return CREDENCIALES;
-    }
     /******************************** INICIA MUELLES********************************/
     //Muelles WS Call
     @future(callout = true)
@@ -27,11 +19,15 @@ public class Apx_PuntosFacturacionCombos {
             if (!ptoMuelle.isEmpty()) {
                 insertaractualizarMuelles(ptoMuelle); //Insertamos o actualizamos encabezados segun sea el caso del resgistro enviado.
             }
+        }else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.MUELLE,errorMsg,null);
+            System.debug(res);
         }
     }
 
     public static HttpResponse CallWSMuelles(String compania) {
-        String CREDENCIALES = generateCredenciales();
         Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_muellesptofact');
         String endpoint = catalogo.URL__c;
 
@@ -39,12 +35,13 @@ public class Apx_PuntosFacturacionCombos {
         try {
             HttpRequest req = new HttpRequest();
             req.setEndpoint(endpoint);
-            req.setBody(CREDENCIALES);
+            req.setBody(WS_Helper.CREDENTIALS);
             req.setMethod('GET');
             req.setTimeout(120000);
             Http h = new Http();
             res = h.send(req);
         } catch(Exception e) {
+            WS_Helper.createLog(WS_Helper.MUELLE,e.getMessage(),null);
             system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
         }
         return res;
@@ -236,7 +233,10 @@ public class Apx_PuntosFacturacionCombos {
             if (!ptoFac.isEmpty()) {
                 insertaractualizarPtoFacturacion(ptoFac); //Insertamos o actualizamos encabezados segun sea el caso del resgistro enviado.
             }
-
+        }else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.PTO_FACT,errorMsg,null);
         }
     }
 
@@ -245,13 +245,21 @@ public class Apx_PuntosFacturacionCombos {
         try {
             HttpRequest req = new HttpRequest();
 
-            req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_UsuPtoFact/webresources/app.entities.usuariosptofact/'+compania);
+            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_usuariosptofact');
+            String endpoint = catalogo.URL__c;
+            req.setEndpoint(endpoint);
+            /*Endpoint antiguo
+            req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_UsuPtoFact/webresources/app.entities.usuariosptofact/'+compania);*/
+            req.setHeader('Content-Type', 'application/json');
+            req.setBody(WS_Helper.CREDENTIALS);
             req.setMethod('GET');
             req.setTimeout(120000);
+            
             Http h = new Http();
             res = h.send(req);
 
         } catch(Exception e) {
+            WS_Helper.createLog(WS_Helper.PTO_FACT,e.getMessage(),null);
             system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
         }
         return res;
@@ -467,6 +475,10 @@ public class Apx_PuntosFacturacionCombos {
             if (!usrptoFac.isEmpty()) {
                 insertaractualizarUsuariosPtoFacturacion(usrptoFac); //Insertamos o actualizamos encabezados segun sea el caso del resgistro enviado.
             }
+        }else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.USUARIO_PTO_FAC,errorMsg,null);
         }
     }
 
@@ -475,7 +487,12 @@ public class Apx_PuntosFacturacionCombos {
         try {
             HttpRequest req = new HttpRequest();
 
-            req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_UsuFact/webresources/app.entities.usuariosfact/'+compania);
+            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_usuariosfact');
+            String endpoint = catalogo.URL__c;
+            /* Endpoint Antiguo
+            req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_UsuFact/webresources/app.entities.usuariosfact/'+compania);*/
+            req.setEndpoint(endpoint);
+            req.setBody(WS_Helper.CREDENTIALS);
             req.setMethod('GET');
             req.setTimeout(120000);
             Http h = new Http();
@@ -483,7 +500,7 @@ public class Apx_PuntosFacturacionCombos {
 
 
         } catch(Exception e) {
-            system.debug('Error ' + e.getMessage() + '- Line number: ' + e.getLineNumber());
+            WS_Helper.createLog(WS_Helper.PTO_FACT,'Error ' + e.getMessage() + '- Line number: ' + e.getLineNumber(),null);
         }
         return res;
     }
@@ -583,7 +600,11 @@ public class Apx_PuntosFacturacionCombos {
 			if (!ptoCombos.isEmpty()) {
 				insertaractualizarEnc(ptoCombos); //Insertamos o actualizamos encabezados segun sea el caso del resgistro enviado.
 			}
-		}
+		}else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.ENCABEZADOS_COMBOS,errorMsg,null);
+        }
 	}
 
 	public static HttpResponse CallWSCombosEncabezados(String compania) {
@@ -592,7 +613,12 @@ public class Apx_PuntosFacturacionCombos {
 		try {
 			HttpRequest req = new HttpRequest();
 
-			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_EncCombos/webresources/app.entities.enccombos/'+compania);
+            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_enccombos');
+            String endpoint = catalogo.URL__c;
+            /*  Endpoint Antiguo
+			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_EncCombos/webresources/app.entities.enccombos/'+compania);*/
+            req.setEndpoint(endpoint);
+            req.setBody(WS_Helper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
 			Http h = new Http();
@@ -600,7 +626,7 @@ public class Apx_PuntosFacturacionCombos {
 
 
 		} catch(Exception e) {
-			system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
+			WS_Helper.createLog(WS_Helper.ENCABEZADOS_COMBOS,'Error ' + e.getMessage() + '- Line number: ' + e.getLineNumber(),null);
 		}
 		return res;
 	}
@@ -675,7 +701,11 @@ public class Apx_PuntosFacturacionCombos {
 				insertaractualizarDet(ptoCombosDet); //Insertamos o actualizamos encabezados segun sea el caso del resgistro enviado.
 			}
 
-		}
+		}else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.DETALLE_COMBOS,errorMsg,null);
+        }
 
 	}
 	//@future(callout=true)
@@ -684,14 +714,19 @@ public class Apx_PuntosFacturacionCombos {
 		try {
 			HttpRequest req = new HttpRequest();
 
-			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_DetCombos/webresources/app.entities.detcombos/'+compania);
+            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_detcombos');
+            String endpoint = catalogo.URL__c;
+            /* Endpoint Antiguo
+			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_DetCombos/webresources/app.entities.detcombos/'+compania);*/
+            req.setEndpoint(endpoint);
+            req.setBody(WS_Helper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
 			Http h = new Http();
 			res = h.send(req);
 
 		} catch(Exception e) {
-			system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
+            WS_Helper.createLog(WS_Helper.DETALLE_COMBOS,'Error ' + e.getMessage() + '- Line number: ' + e.getLineNumber(),null);
 		}
 		return res;
 	}
@@ -796,7 +831,11 @@ public class Apx_PuntosFacturacionCombos {
 				insertaractualizarCombos(ptoCombos); //Insertamos o actualizamos encabezados segun sea el caso del resgistro enviado.
 			}
 
-		}
+		}else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.COMBOS_PUNTO_FACTURACION,errorMsg,null);
+        }
 
 
 	}
@@ -805,13 +844,18 @@ public class Apx_PuntosFacturacionCombos {
 		HttpResponse res = new HttpResponse();
 		try {
 			HttpRequest req = new HttpRequest();
-			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_CombosPtoFact/webresources/app.entities.combosptofact/'+compania);
+            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_combosptofact');
+            String endpoint = catalogo.URL__c;
+            /* Endpoint Antiguo
+			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_CombosPtoFact/webresources/app.entities.combosptofact/'+compania);*/
+            req.setEndpoint(endpoint);
+            req.setBody(WS_Helper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
 			Http h = new Http();
 			res = h.send(req);
 		} catch(Exception e) {
-			system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
+            WS_Helper.createLog(WS_Helper.COMBOS_PUNTO_FACTURACION,'Error ' + e.getMessage() + '- Line number: ' + e.getLineNumber(),null);
 		}
 		return res;
 	}

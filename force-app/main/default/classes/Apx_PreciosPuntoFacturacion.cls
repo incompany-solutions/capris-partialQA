@@ -139,6 +139,7 @@ public class Apx_PreciosPuntoFacturacion {
 		try {
 
 			req.setEndpoint(Url);
+			req.setBody(CredentialHelper.CREDENTIALS);
 			req.setMethod('GET');
 
 			//xmlContent=res.getBody();

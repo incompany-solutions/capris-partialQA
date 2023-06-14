@@ -29,6 +29,7 @@ public class Apx_UbicacionEntregaBLU {
 			fecha = fecha.replace('/', '.');
 			fecha = fecha.substring(0, fecha.length() - 3);
 			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_UbicEntrega/webresources/app.entities.ubicacionesentrega/BLU-' + fecha);
+			req.setBody(CredentialHelper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
 			Http h = new Http();

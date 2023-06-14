@@ -49,6 +49,7 @@ public List<Map<String,String>> XMLElements{get;set;}
        // codcliente=codigoCliente;
         HttpRequest req = new HttpRequest();
         req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_Tramite/webresources/app.entities.tramites/'+codigoCompania+'-'+codigoCliente);
+        req.setBody(CredentialHelper.CREDENTIALS);
         req.setMethod('GET');
         
         return req;

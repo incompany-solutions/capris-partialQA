@@ -22,6 +22,7 @@ public class Apx_CallWSGenerarCodCliente {
                     zona = zonaspl[0];
                 }
                 req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_CodigoCliente/webresources/cliente/getCodCli/' + comp + '-' + zona);
+                req.setBody(CredentialHelper.CREDENTIALS);
                 req.setMethod('GET');
                 req.setTimeout(60000);
                 system.debug('WS ' + 'http://bd2.capris.cr:64423/Salesforce_CodigoCliente/webresources/cliente/getCodCli/' + comp + '-' + zona);

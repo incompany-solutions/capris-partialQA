@@ -81,6 +81,7 @@ public with sharing class Apx_ControladorBoletas {
             String endpoint = 'http://bd2.capris.cr:64423/Salesforce_Boletas/webresources/app.entities.boletas/getCliBol/' + codigoCompania + '-' + codigoCliente;
             system.debug('Endpoint:' + endpoint);
             req.setEndpoint(endpoint);
+            req.setBody(CredentialHelper.CREDENTIALS);
             req.setMethod('GET');
             req.setTimeout(120000);
             res = h.send(req);

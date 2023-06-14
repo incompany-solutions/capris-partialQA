@@ -39,7 +39,7 @@ public class Apx_ControladorBoletasDetalles {
         numBoletaTitle=numBoleta;
        
        req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_Boletas/webresources/app.entities.boletas/getIdBoleta/'+codigoCompania+'-'+codigoCliente+'-'+numBoleta);
-        
+       req.setBody(CredentialHelper.CREDENTIALS);
         req.setMethod('GET');
 
        // xmlContent=res;           

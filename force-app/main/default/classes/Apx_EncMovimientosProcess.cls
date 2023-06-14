@@ -31,6 +31,7 @@ public class Apx_EncMovimientosProcess {
       system.debug('fecha 0 *** ' +dia+'.'+mes+'.'+anno+' '+ hora);
       string fecha = dia+'.'+mes+'.'+anno+' '+ hora;
       req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_EncMovimiento/webresources/app.entities.encmov/getEncFecha/' + compania + '-' + fecha);
+      req.setBody(CredentialHelper.CREDENTIALS);
       req.setMethod('GET');
       req.setTimeout(120000);
       Http h = new Http();
@@ -263,6 +264,7 @@ public class Apx_EncMovimientosProcess {
       system.debug('fecha 0 *** ' +dia+'.'+mes+'.'+anno+' '+ hora);
       string fecha = dia+'.'+mes+'.'+anno+' '+ hora;
       req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_DetMovimiento/webresources/app.entities.detmov/getDetFecha/' + compania + '-' + fecha);
+      req.setBody(CredentialHelper.CREDENTIALS);
       req.setMethod('GET');
       req.setTimeout(120000);
       Http h = new Http();

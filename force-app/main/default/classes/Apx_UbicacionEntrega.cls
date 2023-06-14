@@ -31,6 +31,7 @@ public class Apx_UbicacionEntrega {
 			system.debug('fecha 0 *** ' +dia+'.'+mes+'.'+anno+' '+ hora);
 			string fecha = dia+'.'+mes+'.'+anno+' '+ hora;
 			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_UbicEntrega/webresources/app.entities.ubicacionesentrega/' + compania + '-' + fecha);
+			req.setBody(CredentialHelper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
 			Http h = new Http();
