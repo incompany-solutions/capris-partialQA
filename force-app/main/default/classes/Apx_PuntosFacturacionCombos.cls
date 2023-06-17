@@ -28,21 +28,18 @@ public class Apx_PuntosFacturacionCombos {
     }
 
     public static HttpResponse CallWSMuelles(String compania) {
-        Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_muellesptofact');
-        String endpoint = catalogo.URL__c;
 
         HttpResponse res = new HttpResponse();
         try {
             HttpRequest req = new HttpRequest();
-            req.setEndpoint(endpoint);
+            req.setEndpoint(WS_Helper.getEndpoint('app_entities_muellesptofact'));
             req.setBody(WS_Helper.CREDENTIALS);
             req.setMethod('GET');
             req.setTimeout(120000);
             Http h = new Http();
             res = h.send(req);
         } catch(Exception e) {
-            WS_Helper.createLog(WS_Helper.MUELLE,e.getMessage(),null);
-            system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
+            WS_Helper.createLog(WS_Helper.MUELLE,'Error ' + e.getMessage() + '-Line number ' + e.getLineNumber(),null);
         }
         return res;
     }
@@ -244,10 +241,7 @@ public class Apx_PuntosFacturacionCombos {
         HttpResponse res = new HttpResponse();
         try {
             HttpRequest req = new HttpRequest();
-
-            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_usuariosptofact');
-            String endpoint = catalogo.URL__c;
-            req.setEndpoint(endpoint);
+            req.setEndpoint(WS_Helper.getEndpoint('app_entities_usuariosptofact'));
             /*Endpoint antiguo
             req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_UsuPtoFact/webresources/app.entities.usuariosptofact/'+compania);*/
             req.setHeader('Content-Type', 'application/json');
@@ -486,12 +480,9 @@ public class Apx_PuntosFacturacionCombos {
         HttpResponse res = new HttpResponse();
         try {
             HttpRequest req = new HttpRequest();
-
-            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_usuariosfact');
-            String endpoint = catalogo.URL__c;
             /* Endpoint Antiguo
             req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_UsuFact/webresources/app.entities.usuariosfact/'+compania);*/
-            req.setEndpoint(endpoint);
+            req.setEndpoint(WS_Helper.getEndpoint('app_entities_usuariosfact'));
             req.setBody(WS_Helper.CREDENTIALS);
             req.setMethod('GET');
             req.setTimeout(120000);
@@ -612,12 +603,9 @@ public class Apx_PuntosFacturacionCombos {
 
 		try {
 			HttpRequest req = new HttpRequest();
-
-            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_enccombos');
-            String endpoint = catalogo.URL__c;
             /*  Endpoint Antiguo
 			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_EncCombos/webresources/app.entities.enccombos/'+compania);*/
-            req.setEndpoint(endpoint);
+            req.setEndpoint(WS_Helper.getEndpoint('app_entities_enccombos'));
             req.setBody(WS_Helper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
@@ -713,12 +701,9 @@ public class Apx_PuntosFacturacionCombos {
 		HttpResponse res = new HttpResponse();
 		try {
 			HttpRequest req = new HttpRequest();
-
-            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_detcombos');
-            String endpoint = catalogo.URL__c;
             /* Endpoint Antiguo
 			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_DetCombos/webresources/app.entities.detcombos/'+compania);*/
-            req.setEndpoint(endpoint);
+            req.setEndpoint(WS_Helper.getEndpoint('app_entities_detcombos'));
             req.setBody(WS_Helper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
@@ -844,11 +829,9 @@ public class Apx_PuntosFacturacionCombos {
 		HttpResponse res = new HttpResponse();
 		try {
 			HttpRequest req = new HttpRequest();
-            Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance('app_entities_combosptofact');
-            String endpoint = catalogo.URL__c;
             /* Endpoint Antiguo
 			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_CombosPtoFact/webresources/app.entities.combosptofact/'+compania);*/
-            req.setEndpoint(endpoint);
+            req.setEndpoint(WS_Helper.getEndpoint('app_entities_combosptofact'));
             req.setBody(WS_Helper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);

@@ -29,10 +29,8 @@ Public class CreateJSON {
 
                 gen.writeStartObject();
                 writeCredentials(gen);
-                gen.writeFieldName('ClienteMainList');
-                gen.writeStartArray();
-                gen.writeStartObject();
-                gen.writeStringField('org', 'CAP'); //ValidateNull.doValidation(acc.org_id__c));
+                gen.writeStringField('org', 'CAP');
+                //ValidateNull.doValidation(acc.org_id__c));
                 gen.writeStringField('codCliente', acc.num_cliente__c != null ? acc.num_cliente__c : '0');
                 gen.writeStringField('nombreFantasia', acc.razon_social__c != null ? acc.razon_social__c : ValidateNull.doValidation(acc.mcl_nombre1__c) + ' ' + ValidateNull.doValidation(acc.mcl_nombre2__c) + ' ' + ValidateNull.doValidation(acc.mcl_apellido1__c) + ' ' + ValidateNull.doValidation(acc.mcl_apellido2__c));
                 gen.writeNullField('direccion');
@@ -80,9 +78,6 @@ Public class CreateJSON {
                 gen.writeStringField('idSaleforce', acc.Id);
 
 
-
-                gen.writeEndObject();
-                gen.writeEndArray();
                 gen.writeEndObject();
             }
 
@@ -126,11 +121,13 @@ Public class CreateJSON {
             For (Contact con : contLst) {
 
                 gen.writeStartObject();
+                
+                // gen.writeFieldName('ContactosMainList');
+                // gen.writeStartArray();
+                // gen.writeStartObject();
                 writeCredentials(gen);
-                gen.writeFieldName('ContactosMainList');
-                gen.writeStartArray();
-                gen.writeStartObject();
-                gen.writeStringField('org', 'CAP'); //ValidateNull.doValidation(con.mcc_cod_org__c));
+                gen.writeStringField('org', 'CAP'); //ValidateNull.doValidation(acc.org_id__c));
+                //ValidateNull.doValidation(con.mcc_cod_org__c));
                 gen.writeStringField('codcli', ValidateNull.doValidation(con.Account.num_cliente__c));
                 gen.writeStringField('idContacto', con.idcontacto__c != null ? con.idcontacto__c : '0');
                 gen.writeStringField('cedula', ValidateNull.doValidation(con.mcc_cedula__c));
@@ -153,9 +150,9 @@ Public class CreateJSON {
                 gen.writeStringField('indFiador', ValidateNull.doValidationBoolean(con.mcc_ind_fiador__c));
                 gen.writeStringField('indGerente', ValidateNull.doValidationBoolean(con.mcc_ind_gerente__c));
                 gen.writeStringField('idSaleforce', con.Id);
-                gen.writeEndObject();
-                gen.writeEndArray();
-                gen.writeEndObject();
+                // gen.writeEndObject();
+                // gen.writeEndArray();
+                 gen.writeEndObject();
             }
 
         } Catch(Exception e) {
@@ -187,11 +184,10 @@ Public class CreateJSON {
             For (Correo_Electronico__c obj : contLst) {
 
                 gen.writeStartObject();
-                writeCredentials(gen);
-                gen.writeFieldName('EmailMainList');
-                gen.writeStartArray();
                 gen.writeStartObject();
-                gen.writeStringField('org', 'CAP'); //ValidateNull.doValidation(obj.mce_cod_org__c));
+                writeCredentials(gen);
+                gen.writeStringField('org', 'CAP');
+                //ValidateNull.doValidation(obj.mce_cod_org__c));
                 gen.writeStringField('codcli', ValidateNull.doValidation(obj.mce_num_cliente__c));
 				if(obj.Nombre_del_Contacto__c != null){
                 gen.writeStringField('idContacto', obj.Nombre_del_Contacto__r.Id_Capris__c != null ? obj.Nombre_del_Contacto__r.Id_Capris__c.substringAfter('-') : '');
@@ -209,8 +205,6 @@ Public class CreateJSON {
                 gen.writeStringField('estctatarj', ValidateNull.doValidationBoolean(obj.mce_estctatarj__c));
                 gen.writeNullField('estfe');
                 gen.writeStringField('idSaleforce', obj.Id);
-                gen.writeEndObject();
-                gen.writeEndArray();
                 gen.writeEndObject();
             }
 
@@ -246,10 +240,8 @@ Public class CreateJSON {
 
                 gen.writeStartObject();
                 writeCredentials(gen);
-                gen.writeFieldName('TelefonosMainList');
-                gen.writeStartArray();
-                gen.writeStartObject();
-                gen.writeStringField('org', 'CAP'); //)ValidateNull.doValidation(obj.telc_cod_org__c));
+                //)ValidateNull.doValidation(obj.telc_cod_org__c));
+                gen.writeStringField('org', 'CAP');
                 gen.writeStringField('codcli', ValidateNull.doValidation(obj.Nombre_del_Cliente__r.num_cliente__c));
                 gen.writeStringField('tipo', ValidateNull.doValidation(obj.telc_tipo__c));
                 gen.writeStringField('numero', obj.Name);
@@ -268,8 +260,6 @@ Public class CreateJSON {
 				}
                 gen.writeStringField('estado', ValidateNull.doValidation(obj.telc_estado__c));
                 gen.writeStringField('idSaleforce', obj.Id);
-                gen.writeEndObject();
-                gen.writeEndArray();
                 gen.writeEndObject();
             }
 

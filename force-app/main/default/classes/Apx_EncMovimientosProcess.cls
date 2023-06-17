@@ -108,7 +108,7 @@ public class Apx_EncMovimientosProcess {
             string fecha = xmlNodeObjChild.getText();
             list<string> fechaList = fecha.split('-');
             string fechaCorrecta = fechaList[2]+'-'+fechaList[1]+'-'+fechaList[0]+' 06:00:00';
-            encabezadoItem.EMV_FEC_MOVIMIENTO__c = fechaCorrecta;
+            encabezadoItem.EMV_FEC_MOVIMIENTO__c = Date.valueOf(fechaCorrecta);
           }
           if (xmlNodeObjChild.getName() == 'emvIdtarj' && xmlNodeObjChild.getText() != 'null')
           encabezadoItem.EMV_IDTARJ__c = xmlNodeObjChild.getText();
@@ -244,7 +244,12 @@ public class Apx_EncMovimientosProcess {
       if (!listmov.isEmpty()) {
         insertaractualizarMovimientos(listmov, compania); //Insertamos o actualizamos movientos segun sea el caso del resgistro enviado. 
       }
-    }
+    }else{
+      //Crear Log nuevo por incidencia 
+      String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+      WS_Helper.createLog(WS_Helper.DETALLE_MOVIMIENTOS,errorMsg,null);
+      System.debug(res);
+  }
   }
 
   public static HttpResponse CallWSMovimientos(String compania) {
@@ -263,7 +268,10 @@ public class Apx_EncMovimientosProcess {
       Integer hora = system.now().hour()-1;
       system.debug('fecha 0 *** ' +dia+'.'+mes+'.'+anno+' '+ hora);
       string fecha = dia+'.'+mes+'.'+anno+' '+ hora;
-      req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_DetMovimiento/webresources/app.entities.detmov/getDetFecha/' + compania + '-' + fecha);
+
+      /* Endpoint Antiguo
+      req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_DetMovimiento/webresources/app.entities.detmov/getDetFecha/' + compania + '-' + fecha);*/
+      req.setEndpoint(WS_Helper.getEndpoint('app_entities_detmov'));
       req.setBody(CredentialHelper.CREDENTIALS);
       req.setMethod('GET');
       req.setTimeout(120000);
@@ -273,6 +281,8 @@ public class Apx_EncMovimientosProcess {
 
 
     } catch(Exception e) {
+      //que nombre poner aqui?
+      WS_Helper.createLog(WS_Helper.DETALLE_MOVIMIENTOS,'Error ' + e.getMessage() + '-Line number ' + e.getLineNumber(),null);
       system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
     }
 

@@ -13,7 +13,12 @@ public class Apx_ArticulosSincronizacion {
 			if (!listartc.isEmpty()) {
 				insertaractualizarArticulos(listartc, compania); //Insertamos o actualizamos articulos.
 			}
-		}
+		}else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.ARTICULOS,errorMsg,null);
+            System.debug(res);
+        }
 	}
 	//Invocacion del servicio web de Capris
 
@@ -27,14 +32,16 @@ public class Apx_ArticulosSincronizacion {
 			Integer hora = system.now().hour()-1;
 			system.debug('fecha 0 *** ' +dia+'.'+mes+'.'+anno+' '+ hora);
 			string fecha = dia+'.'+mes+'.'+anno+' '+ hora+':00-H';
-			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_Articulos/webresources/app.entities.articulos/' + compania +'-'+ fecha);
-			req.setBody(CredentialHelper.CREDENTIALS);
+			/* Endpoint Antiguo
+			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_Articulos/webresources/app.entities.articulos/' + compania +'-'+ fecha);*/
+			req.setEndpoint(WS_Helper.getEndpoint('app_entities_articulos'));
+			req.setBody(WS_Helper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
 			Http h = new Http();
 			res = h.send(req);
 		} catch(Exception e) {
-			system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
+			WS_Helper.createLog(WS_Helper.ARTICULOS,'Error ' + e.getMessage() + '-Line number ' + e.getLineNumber(),null);
 		}
 		return res;
 	}
@@ -180,7 +187,12 @@ public class Apx_ArticulosSincronizacion {
 				insertaractualizarExistencias(listexist); //Insertamos o actualizamos encabezados segun sea el caso del resgistro enviado.
 			}
 
-		}
+		}else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.MUELLE,errorMsg,null);
+            System.debug(res);
+        }
 	}
 	//Invocacion del servicio web de Capris
 
@@ -195,8 +207,9 @@ public class Apx_ArticulosSincronizacion {
 			Integer hora = system.now().hour()-1;
 			system.debug('fecha 0 *** ' +dia+'.'+mes+'.'+anno+' '+hora);
 			string fecha = dia+'.'+mes+'.'+anno+' '+ hora+':00-H';
-
-			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_ExistenciaArticulo/webresources/app.entities.existencias/'+compania+'-'+ fecha);
+			/* Endpoint Antiguo
+			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_ExistenciaArticulo/webresources/app.entities.existencias/'+compania+'-'+ fecha);*/
+			req.setEndpoint(WS_Helper.getEndpoint('app_entities_existencias'));
 			req.setBody(CredentialHelper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
@@ -205,6 +218,7 @@ public class Apx_ArticulosSincronizacion {
 			System.debug(' res en CallWSExistencias ' + res);
 
 		} catch(Exception e) {
+			WS_Helper.createLog(WS_Helper.EXISTENCIAS,'Error ' + e.getMessage() + '-Line number ' + e.getLineNumber(),null);
 			system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
 		}
 		return res;
@@ -319,7 +333,12 @@ public class Apx_ArticulosSincronizacion {
 				insertaractualizarGarantias(listgarant); //Insertamos o actualizamos encabezados segun sea el caso del resgistro enviado.
 			}
 
-		}
+		}else{
+            //Crear Log nuevo por incidencia 
+            String errorMsg = 'Status : ' + res.getStatus() + ', Code : ' + res.getStatusCode();  
+            WS_Helper.createLog(WS_Helper.ARTICULOS_EN_GARANTIA,errorMsg,null);
+            System.debug(res);
+        }
 	}
 
 	//Invocacion del servicio web de Capris
@@ -335,7 +354,9 @@ public class Apx_ArticulosSincronizacion {
 			Integer hora = system.now().hour()-1;
 			system.debug('fecha 0 *** ' +dia+'.'+mes+'.'+anno+' '+ hora);
 			string fecha = dia+'.'+mes+'.'+anno+' '+ hora+':00-H';
-			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_ArticulosGarantia/webresources/app.entities.articulosgaran/'+compania+'-'+ fecha);
+			/* Endpoint Antiguo
+			req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_ArticulosGarantia/webresources/app.entities.articulosgaran/'+compania+'-'+ fecha);*/
+			req.setEndpoint(WS_Helper.getEndpoint('app_entities_articulosgaran'));
 			req.setBody(CredentialHelper.CREDENTIALS);
 			req.setMethod('GET');
 			req.setTimeout(120000);
@@ -344,6 +365,7 @@ public class Apx_ArticulosSincronizacion {
 
 
 		} catch(Exception e) {
+			WS_Helper.createLog(WS_Helper.ARTICULOS_EN_GARANTIA,'Error ' + e.getMessage() + '-Line number ' + e.getLineNumber(),null);
 			system.debug('Error ' + e.getMessage() + '-Line number ' + e.getLineNumber());
 		}
 		return res;

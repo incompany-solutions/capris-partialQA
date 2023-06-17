@@ -7,6 +7,14 @@ public with sharing class WS_Helper {
     public static final String ENCABEZADOS_COMBOS = 'Encabezados Combos';
     public static final String DETALLE_COMBOS = 'Detalle Combos';
     public static final String COMBOS_PUNTO_FACTURACION = 'Combos Punto Facturacion';
+    public static final String ARTICULOS = 'Articulos';
+    public static final String EXISTENCIAS = 'Existencias';
+    public static final String ARTICULOS_EN_GARANTIA = 'Articulos en Garantia';
+    public static final String DETALLE_MOVIMIENTOS = 'Detalle Movimientos';
+    public static final String CONTACTOS = 'Contactos';
+    public static final String EMAIL = 'Email';
+    public static final String TELEFONOS = 'Telefonos';
+    public static final String CLIENTES = 'Clientes';
 
     public static String generateCredenciales()
     {
@@ -34,5 +42,11 @@ public with sharing class WS_Helper {
             log.Error_Message__c = errorMessage;
         }
         insert log;
+    }
+
+    public static String getEndpoint(String cmtEndpointName){
+        Catalogo_Endpoints__mdt catalogo = Catalogo_Endpoints__mdt.getInstance(cmtEndpointName);
+        String endpoint = catalogo.URL__c;
+        return endpoint;
     }
 }

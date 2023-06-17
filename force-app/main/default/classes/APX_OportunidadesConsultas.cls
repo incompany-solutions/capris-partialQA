@@ -59,8 +59,11 @@ public class APX_OportunidadesConsultas {
         codComp=useritem.USU_COD_ORG__c;
        system.debug('Parametros '+codComp+' - '+codArticulo );
        HttpRequest req = new HttpRequest();
-       req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_Articulos/webresources/app.entities.articulos/'+codComp+'-'+codArticulo+'-C');
-       req.setBody(CredentialHelper.CREDENTIALS);
+
+       /* Endpoint Antiguo
+       req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_Articulos/webresources/app.entities.articulos/'+codComp+'-'+codArticulo+'-C');*/
+       req.setEndpoint(WS_Helper.getEndpoint('app_entities_articulos'));
+       req.setBody(WS_Helper.CREDENTIALS);
        req.setMethod('GET');
        
       return req; 
@@ -125,7 +128,9 @@ public class APX_OportunidadesConsultas {
     public static HttpRequest requestWSExistencia() {
        
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_ExistenciaArticulo/webresources/app.entities.existencias/'+codComp+'-'+codArticulo+'-C');
+        /* Endpoint Antiguo
+        req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_ExistenciaArticulo/webresources/app.entities.existencias/'+codComp+'-'+codArticulo+'-C');*/
+        req.setEndpoint(WS_Helper.getEndpoint('app_entities_existencias'));
         req.setBody(CredentialHelper.CREDENTIALS);
         req.setMethod('GET');
         return req;
@@ -186,7 +191,9 @@ public class APX_OportunidadesConsultas {
     public static HttpRequest requestWSGarantia() {
         
         HttpRequest req = new HttpRequest();
-        req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_ArticulosGarantia/webresources/app.entities.articulosgaran/'+codComp+'-'+codArticulo+'-C');
+        /* Endpoint Antiguo
+        req.setEndpoint('http://bd2.capris.cr:64423/Salesforce_ArticulosGarantia/webresources/app.entities.articulosgaran/'+codComp+'-'+codArticulo+'-C');*/
+        req.setEndpoint(WS_Helper.getEndpoint('app_entities_articulosgaran'));
         req.setBody(CredentialHelper.CREDENTIALS);
         req.setMethod('GET'); 
         return req;
